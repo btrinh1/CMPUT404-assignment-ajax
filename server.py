@@ -22,7 +22,7 @@
 
 
 import flask
-from flask import Flask, request, redirect, make_response
+from flask import Flask, request, redirect, make_response, jsonify 
 import json
 app = Flask(__name__)
 app.debug = True
@@ -80,19 +80,25 @@ def hello():
 def update(entity):
     '''update the entities via this interface'''
     data = flask_post_json()
-    if (data != ""):
+    if (data != {}):
     	myWorld.set(entity, data)
     	return create_response(myWorld.get(entity))
     return None
 
 def create_response(data):
-	response = make_response(json.dumps(data), 200)
+	response = make_response(json.dumps(data))
 	response.headers['Content-Type'] = 'application/json'
 	return response  
 	
 @app.route("/world", methods=['POST','GET'])    
 def world():
     '''you should probably return the world here'''
+    if request.method == "POST":
+        return jsonify(myWorld.world())
+
+    elif request.method == "GET":
+        return jsonify(myWorld.world())
+
     return create_response(myWorld.world())
 
 @app.route("/entity/<entity>")    

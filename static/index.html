@@ -45,7 +45,7 @@ function sendJSONXMLHTTPRequest(url, objects, callback) {
                 }
             } 
             catch(e) {
-                alert('Error: ' + e.name);
+               // alert('Error: ' + e.name);
             }
         }
     };
@@ -71,7 +71,7 @@ function drawCircle(context,entity) {
         //moveTo(x,y);
         fillStyle = entity["colour"];
         strokeStyle = fillStyle;
-        arc(x, y, (entity["radius"])?entity["radius"]:60, 1, 2.0 * Math.PI, false);  
+        arc(x, y, (entity["radius"])?entity["radius"]:50, 0, 2.0 * Math.PI, false);  
         stroke();                                
     }
 }
@@ -81,7 +81,7 @@ function prepEntity(entity) {
         entity["colour"] = "#FF0000";
     }
     if (!entity["radius"]) {
-        entity["radius"] = 30; // is ok to modify this i hope..
+        entity["radius"] = 20; // is ok to modify this i hope..
     }
     return entity;
 }
@@ -142,9 +142,9 @@ function getPosition(e) {
 
 function addEntity(entity, data) {
     world[entity] = data;
-    drawNextFrame(); // (but should we?)
+    //drawNextFrame(); // (but should we?)
     //XXX: Send a XHTML Request that updates the entity you just  modified!
-    sendJSONXMLHTTPRequest("/entity/" + entity, data, null)
+    sendJSONXMLHTTPRequest('/entity/' + entity, data, drawFrame)
 
 }
 
@@ -263,13 +263,14 @@ mouse.mouseuppers.push(function(x,y,clicked,e) {
 
 mouse.mousedraggers.push(function(x,y,clicked,e) {
     addEntityWithoutName({'x':x,'y':y,'colour':'white',
-                          'radius':10});
+                          'radius':6});
 });
 
 
 function update() {
     //XXX: TODO Get the world from the webservice using a XMLHTTPRequest
-    sendJSONXMLHTTPRequest("/world/", {}, drawNextFrame());
+    sendJSONXMLHTTPRequest("/world", {}, null);
+    drawNextFrame();
     drawFrame();
 }
 
