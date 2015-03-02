@@ -269,8 +269,12 @@ mouse.mousedraggers.push(function(x,y,clicked,e) {
 
 function update() {
     //XXX: TODO Get the world from the webservice using a XMLHTTPRequest
-    sendJSONXMLHTTPRequest("/world", {}, null);
-    drawNextFrame();
+    sendJSONXMLHTTPRequest(document.location.origin + "/world", null, function(data) {
+        if (JSON.stringify(world) != JSON.stringify(data) ) {
+            world = data;
+            drawNextFrame();
+        }
+    }); // gets info from /world and json stringifies for view if world and data not equal
     drawFrame();
 }
 
